@@ -26,20 +26,16 @@
 # Показывать предыдущую станцию, текущую, следующую, на основе маршрута +
 
 class RailwayStation
-  attr_reader :name
+  attr_reader :name, :trains_at_station
 
   def initialize(name)
     @name = name
 
-    @trains = {}
+    @trains_at_station = []
   end
 
-  def get_train(train)
-    @trains <= train
-  end
-
-  def show_trains
-    puts "Trains at station: #{trains}"
+  def add_train(train)
+    @trains_at_station << train
   end
 end
 
@@ -54,74 +50,51 @@ class Route
     @stations << station
   end
 
-  def show_stations
-    puts route
-  end
-
-  def route
-    route = []
-    route << @start_station << @stations << @end_station
-    route.flatten
+  def all_stations
+    @route = []
+    @route << @start_station << @stations << @end_station
+    @route.flatten
   end
 end
 
 class Train
-  attr_reader :type
+  attr_reader :type, :speed, :carriages
+  attr_accessor :route
 
   def initialize(type, carriages)
     @type = type
     @carriages = carriages
 
     @speed = 0
-    @route = []
   end
 
   def accelerate(speed)
     @speed += speed
-    puts "Train sped on #{@speed} km/h"
-  end
-
-  def speed
-    puts "Current speed is: #{@speed} km/h"
   end
 
   def brake
     @speed = 0
-    puts 'Train has stoped'
-  end
-
-  def carriages
-    puts "Train has #{@carriages} carriages"
   end
 
   def add_carriage
-    if @speed.zero?
-      @carriages += 1
-
-    else
-      puts 'Stop the train first!'
-    end
+    @carriages += 1 if speed.zero?
   end
 
   def remove_carriage
-    if @speed.zero?
-      if @carriages != 1
-        @carriages -= 1
-      else
-        puts 'Train has last carriage'
-      end
-
-    else
-      puts 'Stop the train first!'
-    end
-  end
-
-  def get_route(route)
-    @route = route
+    @carriages -= 1 if @speed.zero? && @carriages != 1
   end
 end
 
-malinovka = RailwayStation.new('Малиновка')
-petrovshina = RailwayStation.new('Петровщина')
-mihalova = RailwayStation.new('Михалова')
-grushevka = RailwayStation.new('Грушевка')
+# malinovka = RailwayStation.new('Малиновка')
+# petrovshina = RailwayStation.new('Петровщина')
+# mihalova = RailwayStation.new('Михалова')
+# grushevka = RailwayStation.new('Грушевка')
+
+# to_work = Route.new(malinovka, grushevka)
+# to_work.add_station(petrovshina)
+# to_work.add_station(mihalova)
+# p to_work.all_stations.map(&:name)
+
+# first_train = Train.new('Грузовой', 5)
+# first_train.route = to_work
+# puts first_train.route
