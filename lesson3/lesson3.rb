@@ -26,6 +26,7 @@
 # Показывать предыдущую станцию, текущую, следующую, на основе маршрута +
 
 class RailwayStation
+  attr_reader :name
 
   def initialize(name)
     @name = name
@@ -65,6 +66,8 @@ class Route
 end
 
 class Train
+  attr_reader :type
+
   def initialize(type, carriages)
     @type = type
     @carriages = carriages
@@ -112,4 +115,13 @@ class Train
       puts 'Stop the train first!'
     end
   end
+
+  def get_route(route)
+    @route = route
+  end
 end
+
+malinovka = RailwayStation.new('Малиновка')
+petrovshina = RailwayStation.new('Петровщина')
+mihalova = RailwayStation.new('Михалова')
+grushevka = RailwayStation.new('Грушевка')
