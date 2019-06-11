@@ -19,14 +19,15 @@
 # показывать текущую скорость
 # тормозить
 # показывать количество вагонов
-# прицеплять/отцеплять вагоны (по одному вагону за операцию, метод просто увеличивает или уменьшает количество вагонов). 
+# прицеплять/отцеплять вагоны (по одному вагону за операцию, метод просто увеличивает или уменьшает количество вагонов).
 # Прицепка/отцепка вагонов может осуществляться только если поезд не движется.
-# Принимать маршрут следования +
-# Перемещаться между станциями, указанными в маршруте. +
-# Показывать предыдущую станцию, текущую, следующую, на основе маршрута +
+# Принимать маршрут следования
+# Перемещаться между станциями, указанными в маршруте.
+# Показывать предыдущую станцию, текущую, следующую, на основе маршрута
 
 class RailwayStation
   attr_reader :name, :trains_at_station
+  attr_writer :start_station, :end_station
 
   def initialize(name)
     @name = name
@@ -37,32 +38,43 @@ class RailwayStation
   def add_train(train)
     @trains_at_station << train
   end
+
+  def trains_by_type
+    trains_by_type = Hash.new(0)
+    types = @trains_at_station.map(&:type)
+    types.each { |type| trains_by_type[type] += 1 }
+    trains_by_type
+  end
+
+  def remove_train(train)
+    @trains_at_station.delete(train)
+  end
 end
 
 class Route
+  attr_reader :stations
+
   def initialize(start_station, end_station)
     @start_station = start_station
     @end_station = end_station
-    @stations = []
+    @stations = [@start_station, @end_station]
   end
 
-  def add_station(station)
-    @stations << station
+  def add_station(index, station)
+    @stations.insert(index, station)
   end
 
-  def all_stations
-    @route = []
-    @route << @start_station << @stations << @end_station
-    @route.flatten
+  def remove_station(station)
+    @stations.delete(station)
   end
 end
 
 class Train
-  attr_reader :type, :speed, :carriages
+  attr_reader :type, :speed, :carriages, :current_station, :previous_station, :next_station
   attr_accessor :route
 
   def initialize(type, carriages)
-    @type = type
+    @type = type.downcase
     @carriages = carriages
 
     @speed = 0
@@ -83,18 +95,10 @@ class Train
   def remove_carriage
     @carriages -= 1 if @speed.zero? && @carriages != 1
   end
+
+  def move_to(station_index)
+    @current_station = @route.stations[station_index]
+    @previous_station = @route.stations[station_index - 1]
+    @next_station = @route.stations[station_index + 1]
+  end
 end
-
-# malinovka = RailwayStation.new('Малиновка')
-# petrovshina = RailwayStation.new('Петровщина')
-# mihalova = RailwayStation.new('Михалова')
-# grushevka = RailwayStation.new('Грушевка')
-
-# to_work = Route.new(malinovka, grushevka)
-# to_work.add_station(petrovshina)
-# to_work.add_station(mihalova)
-# p to_work.all_stations.map(&:name)
-
-# first_train = Train.new('Грузовой', 5)
-# first_train.route = to_work
-# puts first_train.route
