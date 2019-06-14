@@ -105,34 +105,3 @@ class Train
     @next_station = @route.stations[station_index + 1]
   end
 end
-
-malinovka = RailwayStation.new('малиновка')
-first_train = Train.new('ГРУЗОВОЙ', 5)
-# second_train = Train.new('ГРУЗОВОЙ', 2)
-# third_train = Train.new('пассажирский', 3)
-# malinovka.add_train(first_train)
-# malinovka.add_train(second_train)
-# malinovka.add_train(third_train)
-# p malinovka.trains_at_station
-# p malinovka.trains_by_type
-# malinovka.remove_train(second_train)
-# p malinovka.trains_by_type
-petrovka = RailwayStation.new('петровщина')
-mihalova = RailwayStation.new('михалова')
-to_work = Route.new(malinovka, mihalova)
-to_work.add_station(1, petrovka)
-
-first_train.route = to_work
-# p first_train.speed
-# first_train.move_to(malinovka)
-# p first_train.current_station
-# # first_train.accelerate_on(60)
-# first_train.move_to(0)
-# p first_train.current_station
-# p first_train.previous_station
-# p first_train.next_station
-p first_train.carriages
-first_train.remove_carriage
-first_train.remove_carriage
-p first_train.carriages
-p first_train.add_carriage
