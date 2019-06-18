@@ -1,9 +1,17 @@
 class RailwayStation
   attr_reader :name, :trains_at_station
 
+  @@all = []
+
+  # В классе RailwayStation (жд станция) создать метод класса all, который выводит список всех станций, созданных на данный момент
+  def self.all
+    @@all
+  end
+
   def initialize(name)
     @name = name.capitalize
     @trains_at_station = []
+    @@all << self
   end
 
   def add_train(train)
@@ -27,3 +35,5 @@ class RailwayStation
     trains_by_type
   end
 end
+
+malinovka = RailwayStation.new('malinovka')
