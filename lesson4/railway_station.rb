@@ -35,5 +35,3 @@ class RailwayStation
     trains_by_type
   end
 end
-
-malinovka = RailwayStation.new('malinovka')
