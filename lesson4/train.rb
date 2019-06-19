@@ -66,3 +66,5 @@ second_train = Train.new(12)
 third_train = Train.new(999)
 
 puts Train.instances
+Train::ClassMethods::Class.new.register_instance
+p Train.instances
