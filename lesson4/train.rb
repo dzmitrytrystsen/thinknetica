@@ -1,15 +1,33 @@
-class Train
-  attr_reader :type, :speed, :carriages, :current_station, :previous_station, :next_station
-  attr_accessor :route
+require_relative 'manufacture_module'
+require_relative 'instance_counter_module'
 
-  def initialize
+class Train
+  include Manufacture
+  include InstanceCounter
+
+  attr_reader :type, :carriages, :current_station, :train_number
+  attr_accessor :route, :speed
+
+  @@all_trains = []
+
+  def self.all_trains
+    @@all_trains
+  end
+
+  # В классе Train создать метод класса find, который принимает номер поезда и возвращает объект поезда по номеру или nil, 
+  # если поезд с таким номером не найден.
+  def self.find(train_number)
+    @@all_trains.detect { |train| train.train_number == train_number}
+  end
+
+  def initialize(train_number)
+    @train_number = train_number
     @type = type_of
     @carriages = []
     @speed = 0
-  end
+    @@all_trains << self
 
-  def accelerate_on(speed_value)
-    @speed += speed_value
+    register_instance
   end
 
   def brake
@@ -26,8 +44,14 @@ class Train
 
   def move_to(station)
     @current_station = route.stations[route.stations.index(station)] if route.stations.include?(station)
+  end
+
+  def next_station
     @next_station = route.stations[route.stations.index(current_station) + 1]
-    @next_station = route.stations[route.stations.index(current_station) - 1]
+  end
+
+  def previous_station
+    @previous_station = route.stations[route.stations.index(current_station) - 1]
   end
 
   protected
